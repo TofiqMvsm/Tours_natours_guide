@@ -3,16 +3,26 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit')
 const AppError = require('./utils/appError')
+const helmet = require('helmet')
 const globalErrorHandler = require('./controllers/errorController')
 
 const app = express();
 const toursRouter = require('./routes/tourRouter')
 const usersRouter = require('./routes/userRouter')
+
 //MiddleWares
+
+
+
 if(process.env.NODE_ENV === "development"){
   app.use(morgan('dev'));
 }
 
+//Set security http headers
+app.use(helmet())
+
+
+//Limit the request
 const limiter = rateLimit({
   max : 100,
   windowMs : 60 * 60 * 1000,
@@ -22,12 +32,19 @@ const limiter = rateLimit({
 
 app.use(limiter)
 
+
+//Test Middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   // console.log(req.headers);
   next();
 });
-app.use(express.json());
+
+
+//Body parser, reading data from the body
+app.use(express.json({limit : '10kb'}));
+
+//Serving static files
 app.use(express.static(`${__dirname}/public`))
 
 
