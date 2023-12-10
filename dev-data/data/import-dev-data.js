@@ -25,7 +25,7 @@ mongoose
 
 
 //Read File
-  const tours =JSON.parse(fs.readFileSync(`${__dirname}/tours-simple.json`))
+  const tours =JSON.parse(fs.readFileSync(`${__dirname}/tours.json`))
 
 
 // Import Data

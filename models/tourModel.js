@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const slugify = require('slugify');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const validator = require('validator')
+const validator = require('validator');
+const User = require('./userModel');
 
 const tourSchema = new mongoose.Schema({
     name : {
@@ -72,10 +73,35 @@ const tourSchema = new mongoose.Schema({
       select : false
     },
     startDates : [Date],
+    startLocation : {
+      type : {
+        type : String,
+        default : 'Point',
+        enum : ['Point']
+      },
+      address :String ,
+      description : String,
+      coordinates : [Number]
+    },
+    locations : [
+      {
+        type : {
+          type : String,
+          default : 'Point',
+          enum : ['Point']
+        },
+        address :String ,
+        description : String,
+        coordinates : [Number],
+        day : Number
+      }
+    ],
+    guides : Array,
     secretTours : {
       type : Boolean,
       default : false
     }
+   
 
   },{
     toJSON : {virtuals : true},
@@ -87,6 +113,12 @@ const tourSchema = new mongoose.Schema({
     next()
   })
   
+  tourSchema.pre('save',async function(next){
+    const guidesPromises = this.guides.map((async id=>await User.findById(id)))
+    this.guides = await Promise.all(guidesPromises)
+    next()
+  })
+
 
   // tourSchema.pre('save',function (next){
   //   this.slug = slugify(this.name,{lower : true})
