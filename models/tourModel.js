@@ -96,7 +96,12 @@ const tourSchema = new mongoose.Schema({
         day : Number
       }
     ],
-    guides : Array,
+    guides : [
+      {
+        type : mongoose.Schema.ObjectId,
+        ref : "User"
+      }
+    ],
     secretTours : {
       type : Boolean,
       default : false
@@ -113,11 +118,11 @@ const tourSchema = new mongoose.Schema({
     next()
   })
   
-  tourSchema.pre('save',async function(next){
-    const guidesPromises = this.guides.map((async id=>await User.findById(id)))
-    this.guides = await Promise.all(guidesPromises)
-    next()
-  })
+  // tourSchema.pre('save',async function(next){
+  //   const guidesPromises = this.guides.map((async id=>await User.findById(id)))
+  //   this.guides = await Promise.all(guidesPromises)
+  //   next()
+  // })
 
 
   // tourSchema.pre('save',function (next){
@@ -138,6 +143,15 @@ const tourSchema = new mongoose.Schema({
 
   tourSchema.pre(/^find/,function (next) {
     this.find({secretTours : {$ne : true}})
+    next()
+  })
+
+
+  tourSchema.pre(/^find/,function(next){
+    this.populate({
+      path : "guides",
+      select : "-__v -passwordChangedAt"
+    });
     next()
   })
 
