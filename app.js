@@ -12,7 +12,7 @@ const hpp = require('hpp')
 const globalErrorHandler = require('./controllers/errorController')
 const toursRouter = require('./routes/tourRouter')
 const usersRouter = require('./routes/userRouter')
-
+const reviewRouter = require('./routes/reviewRouter')
 //MiddleWares
 
 
@@ -72,7 +72,7 @@ app.use(express.static(`${__dirname}/public`))
 
 app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', usersRouter);
-
+app.use('/api/v1/reviews',reviewRouter)
 
 app.all('*',(req,res,next)=>{
 
