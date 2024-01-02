@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-
+const factory = require('./handleFactory')
 exports.getAllUsers = catchAsync(async (req, res) => {
   const users = await User.find();
   // console.log(tours);
@@ -85,9 +85,4 @@ exports.updateUser = (req, res) => {
   });
 };
 
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'fail',
-    message: 'Invalid Route',
-  });
-};
+exports.deleteUser = factory.deleteOne(User)
