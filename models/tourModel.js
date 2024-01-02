@@ -179,11 +179,11 @@ tourSchema.pre('aggregate',function (next) {
     return this.duration / 7
   })
 
-  tourSchema.virtual('reviews',{
-    ref : 'Review',
-    foreignField : 'tour',
-    localField : "_id"
-  })
+    tourSchema.virtual('reviews',{
+      ref : 'Review',
+      foreignField : 'tour',
+      localField : "_id"
+    })
 
   
 
