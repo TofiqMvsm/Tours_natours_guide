@@ -78,11 +78,6 @@ exports.getUser = (req, res) => {
   });
 };
 
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'fail',
-    message: 'Invalid Route',
-  });
-};
+exports.updateUser = factory.updateOne(User)
 
 exports.deleteUser = factory.deleteOne(User)

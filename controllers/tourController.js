@@ -5,9 +5,9 @@
 /* eslint-disable prefer-object-spread */
 const Tour = require('./../models/tourModel');
 const APIFeatures = require('./../utils/apiFeatures');
-const catchAsync = require('./../utils/catchAsync')
-const AppError = require('./../utils/appError')
-const factory = require('./handleFactory')
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
+const factory = require('./handleFactory');
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
@@ -15,31 +15,30 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = catchAsync(async (req, res,next) => {
+exports.getAllTours = catchAsync(async (req, res, next) => {
   // Execute Query
   const features = new APIFeatures(Tour.find(), req.query)
-  .filter()
-  .sort()
-  .limitField()
-  .paginate();
+    .filter()
+    .sort()
+    .limitField()
+    .paginate();
 
-const tours = await features.query;
+  const tours = await features.query;
 
-
-res.status(200).json({
-  status: 'success',
-  time: req.requestTime,
-  results: tours.length,
-  data: {
-    tours,
-  },
+  res.status(200).json({
+    status: 'success',
+    time: req.requestTime,
+    results: tours.length,
+    data: {
+      tours,
+    },
+  });
 });
-});
 
-exports.getTour = catchAsync(async (req, res,next) => {
+exports.getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id).populate('reviews');
-  if(!tour){
-    return next(new AppError("Invalid ID"),404)
+  if (!tour) {
+    return next(new AppError('Invalid ID'), 404);
   }
   res.status(200).json({
     status: 'success',
@@ -51,41 +50,11 @@ exports.getTour = catchAsync(async (req, res,next) => {
 
 // eslint-disable-next-line arrow-body-style
 
+exports.createTour = factory.createOne(Tour);
+exports.updateTour = factory.updateOne(Tour);
+exports.deleteTour = factory.deleteOne(Tour);
 
-exports.createTour = catchAsync(async (req, res,next) => {
-  const newTour = await Tour.create(req.body);
-    res.status(201).json({
-      status: 'success',
-      data: {
-        tour: newTour,
-      },
-    });
-});
-
-exports.updateTour = catchAsync(async (req, res,next) => {
-  const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
-});
-
-// exports.deleteTour = catchAsync(async (req, res,next) => {
-//   await Tour.findByIdAndRemove(req.params.id);
-//     res.status(204).json({
-//       status: 'success',
-//       data: null,
-//     });
-// });
-
-exports.deleteTour = factory.deleteOne(Tour)
-
-exports.getToursStats = catchAsync(async (req, res,next) => {
+exports.getToursStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
     { $match: { ratingsAverage: { $gte: 4.5 } } },
     {
@@ -101,18 +70,18 @@ exports.getToursStats = catchAsync(async (req, res,next) => {
     },
     {
       $sort: { avgRating: 1 },
-    }
+    },
   ]);
   res.status(200).json({
     status: 'success',
-    result : stats.length,
+    result: stats.length,
     data: {
       stats,
     },
   });
 });
 
-exports.getMonthlyPlan = catchAsync(async (req, res,next) => {
+exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1;
   const plan = await Tour.aggregate([
     {
@@ -127,20 +96,20 @@ exports.getMonthlyPlan = catchAsync(async (req, res,next) => {
       },
     },
     {
-      $group : {
-        _id : {$month : '$startDates'},
-        numOfTours : {$sum : 1},
-        tours : {$push : '$name'}
-      }
+      $group: {
+        _id: { $month: '$startDates' },
+        numOfTours: { $sum: 1 },
+        tours: { $push: '$name' },
+      },
     },
     {
-      $addFields : {month : '$_id'}
+      $addFields: { month: '$_id' },
     },
     {
-      $project : { _id : 0}
+      $project: { _id: 0 },
     },
     {
-      $sort : { month : 1}
+      $sort: { month: 1 },
     },
     // {
     //   $limit : 6
@@ -148,7 +117,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res,next) => {
   ]);
   res.status(200).json({
     status: 'success',
-    result : plan.length,
+    result: plan.length,
     data: {
       plan,
     },
