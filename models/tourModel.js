@@ -40,7 +40,8 @@ const tourSchema = new mongoose.Schema({
       type : Number,
       default : 4.5,
       max : [5,"A tour must have only 5 rating"],
-      min : [1,"A tour must have higher or equal than 1 "]
+      min : [1,"A tour must have higher or equal than 1 "],
+      set : val => Math.round(val * 10) / 10 
     },
     ratingsQuantity : {
       type : Number,
@@ -112,6 +113,10 @@ const tourSchema = new mongoose.Schema({
     toJSON : {virtuals : true},
     toObject : {virtuals : true}
   })
+
+
+  tourSchema.index({ price: 1, ratingsAverage: -1 })
+  tourSchema.index({slug : 1})
 
   tourSchema.pre('save',function (next) {
     console.log(this);
