@@ -1,11 +1,14 @@
 const express = require('express');
 
 const router = express.Router();
-const {getAllTours,getTour,deleteTour,updateTour,createTour,aliasTopTours, getToursStats, getMonthlyPlan} = require("../controllers/tourController")
+const {getAllTours,getTour,deleteTour,updateTour,createTour,aliasTopTours, getToursStats, getMonthlyPlan, getToursWithin, getTourDistance} = require("../controllers/tourController")
 const {protect,restrictTo} = require("../controllers/authController")
 const reviewRouter = require('../routes/reviewRouter')
 
 // router.param('id',checkId)
+
+router.route('/tours-within/:distance/center/:latlng/unit/:unit').get(getToursWithin)
+router.route('/distance/:latlng/unit/:unit').get(getTourDistance)
 
 router.route('/top-5-cheap').get(aliasTopTours)
 router.route('/tours-stats').get(getToursStats)

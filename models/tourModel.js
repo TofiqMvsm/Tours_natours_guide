@@ -117,6 +117,7 @@ const tourSchema = new mongoose.Schema({
 
   tourSchema.index({ price: 1, ratingsAverage: -1 })
   tourSchema.index({slug : 1})
+  tourSchema.index({startLocation : '2dsphere'})
 
   tourSchema.pre('save',function (next) {
     console.log(this);
@@ -171,13 +172,13 @@ const tourSchema = new mongoose.Schema({
 
   // Aggregate Middleware
 
-tourSchema.pre('aggregate',function (next) {
-  // console.log(this.pipeline());
-  this.pipeline().unshift({
-    $match : {secretTours : {$ne : true}}
-  })
-  next()
-})
+// tourSchema.pre('aggregate',function (next) {
+//   // console.log(this.pipeline());
+//   this.pipeline().unshift({
+//     $match : {secretTours : {$ne : true}}
+//   })
+//   next()
+// })
   
 
   tourSchema.virtual('durationWeeks').get(function () {
