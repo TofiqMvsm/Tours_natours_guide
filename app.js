@@ -1,4 +1,5 @@
 // Variable Declares
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit')
@@ -13,9 +14,15 @@ const globalErrorHandler = require('./controllers/errorController')
 const toursRouter = require('./routes/tourRouter')
 const usersRouter = require('./routes/userRouter')
 const reviewRouter = require('./routes/reviewRouter')
+
+
+
+
+app.set('view engine','pug')
+app.set('views',path.join(__dirname,'views'))   
+//Serving static files
+app.use(express.static(path.join(__dirname,'public')))
 //MiddleWares
-
-
 
 if(process.env.NODE_ENV === "development"){
   app.use(morgan('dev'));
@@ -62,14 +69,17 @@ app.use(hpp({
 }));
 
 
-//Serving static files
-app.use(express.static(`${__dirname}/public`))
 
 
 
 
 //Routes
-
+app.get('/',(req,res)=>{
+  res.status(200).render('base',{
+    tour : "The forest hiker",
+    user : "Tofiq Movsumov"
+  })
+})
 app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/reviews',reviewRouter)
