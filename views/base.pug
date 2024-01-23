@@ -1,12 +1,20 @@
 doctype html 
 html 
     head 
-        title Natours | #{tour}
+        title Natours | #{title}
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link( href='https://fonts.googleapis.com/css?family=Lato:300,300i,700' rel='stylesheet')
         link(rel='stylesheet' href='css/style.css')
-        link(rel='shortcut icon' type='image/png' href='img/favicon.png')
+        link(rel='shortcut icon' type='image/png' href='img/favicon.png')        
     body 
-        h1= tour
-        - const x = 5
-        h2=tour.toUpperCase()
-        h2= 2 * x 
-        p= user    
+        // HEADER
+        include _header
+
+        // CONTENT
+        block content
+            h1 This is home page
+        
+        // FOOTER
+        include _footer
+        
