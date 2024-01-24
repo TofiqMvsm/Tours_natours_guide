@@ -131,10 +131,10 @@ const tourSchema = new mongoose.Schema({
   // })
 
 
-  // tourSchema.pre('save',function (next){
-  //   this.slug = slugify(this.name,{lower : true})
-  //   next()
-  // })
+  tourSchema.pre('save',function (next){
+    this.slug = slugify(this.name,{lower : true})
+    next()
+  })
 
   // eslint-disable-next-line prefer-arrow-callback
   // tourSchema.post('save',function (doc,next) {
