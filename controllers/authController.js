@@ -7,7 +7,7 @@ const AppError = require('../utils/appError');
 
 const sendEmail = require(`../utils/email`);
 const signToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRETKEY, {
+  jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
 
@@ -36,6 +36,8 @@ const createSendToken = (user, statusCode, res) => {
     },
   });
 };
+
+
 
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
@@ -85,7 +87,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // 2) Verification token
 
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRETKEY);
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   console.log(decoded);
 
   // 3) Check if user still exists

@@ -10,7 +10,7 @@ const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const hpp = require('hpp')
 
-const viewRouter = require('./routes/viewRoutes')
+
 
 const globalErrorHandler = require('./controllers/errorController')
 const toursRouter = require('./routes/tourRouter')
@@ -76,7 +76,6 @@ app.use(hpp({
 
 
 
-app.use('/',viewRouter)
 app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/reviews',reviewRouter)
