@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A user must have a name'],
   },
+  photo: {
+    type: String,
+    default: "default.jpg"
+  },
   role: {
     type: String,
     enum: ['user', 'guide', 'lead-guide', 'admin'],
