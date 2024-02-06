@@ -2,8 +2,8 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
 process.on("uncaughtException",err => {
-  console.log(err.message);
-  console.log("Uncaught Expression!");
+  // console.log(err.message);
+  // console.log("Uncaught Expression!");
   process.exit(1)
 })
 

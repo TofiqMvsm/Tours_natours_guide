@@ -9,7 +9,7 @@ const app = express();
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const hpp = require('hpp')
-
+const compression = require('compression');
 
 
 const globalErrorHandler = require('./controllers/errorController')
@@ -53,6 +53,8 @@ app.use((req, res, next) => {
   next();
 });
 
+
+app.use(compression())
 
 //Body parser, reading data from the body
 app.use(express.json({limit : '10kb'}));
